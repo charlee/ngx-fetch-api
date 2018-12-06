@@ -16,6 +16,14 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "ngx-fetch-api": [
+        "dist/ngx-fetch-api"
+      ],
+      "ngx-fetch-api/*": [
+        "dist/ngx-fetch-api/*"
+      ]
+    }
   }
 }

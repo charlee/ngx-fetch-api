@@ -129,6 +129,41 @@
           }
         }
       }
+    },
+    "ngx-fetch-api": {
+      "root": "projects/ngx-fetch-api",
+      "sourceRoot": "projects/ngx-fetch-api/src",
+      "projectType": "library",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-fetch-api/tsconfig.lib.json",
+            "project": "projects/ngx-fetch-api/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-fetch-api/src/test.ts",
+            "tsConfig": "projects/ngx-fetch-api/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-fetch-api/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-fetch-api/tsconfig.lib.json",
+              "projects/ngx-fetch-api/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "ngx-fetch-api-app"
