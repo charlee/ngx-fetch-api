@@ -1,6 +1,24 @@
 {
   "name": "ngx-fetch-api",
   "version": "1.0.0",
+  "descirption": "A library for Angular 6+ using JavaScript fetch API to access RESTful API.",
+  "author": "Charlee Li",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/charlee/ngx-fetch-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/charlee/ngx-fetch-api/issues"
+  },
+  "homepage": "https://github.com/charlee/ngx-fetch-api",
+  "keywords": [
+    "angular",
+    "javascript",
+    "typescript",
+    "fetch",
+    "restful"
+  ],
+  "license": "MIT",
   "peerDependencies": {
     "@angular/common": "^6.0.0",
     "@angular/core": "^6.0.0",
