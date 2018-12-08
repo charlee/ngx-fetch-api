@@ -12,7 +12,6 @@ export class AppComponent implements OnInit {
   constructor(private fetchApi: NgxFetchApiService) {}
 
   ngOnInit() {
-    this.fetchApi.post('/api/test', { d: 1 }, { t: 2 });
+    this.fetchApi.get('/api/hello/', { t: 2 });
   }
-
 }
