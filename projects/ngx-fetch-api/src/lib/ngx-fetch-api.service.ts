@@ -2,6 +2,14 @@ import { Injectable } from '@angular/core';
 
 export type HttpParams = { [key: string]: string | number };
 
+export type HttpHeaders = { [key: string]: string };
+
+export interface RequestOptions {
+  params?: HttpParams,
+  headers?: HttpHeaders,
+  data?: object,
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,6 +25,10 @@ export class NgxFetchApiService {
     }
 
     this.baseUrl = baseUrl;
+  }
+
+  getHeaders(headers?: HttpHeaders): HttpHeaders {
+    return headers;
   }
 
   private getUrl(path: string, params?: HttpParams): string {
@@ -40,15 +52,19 @@ export class NgxFetchApiService {
   request<T>(
     method: string,
     path: string,
-    params?: HttpParams,
-    data?: object,
+    options?: RequestOptions,
   ): Promise<T> {
-    const options = { method };
-    if (data) {
-      options['body'] = JSON.stringify(data);
+    const fetchOptions = { method };
+    if (options.data) {
+      fetchOptions['body'] = JSON.stringify(options.data);
     }
 
-    return fetch(this.getUrl(path, params), options).then(response => {
+    if (options.headers) {
+      const headers = this.getHeaders(options.headers);
+      fetchOptions['headers'] = headers;
+    }
+
+    return fetch(this.getUrl(path, options.params), options).then(response => {
       const contentType = response.headers.get('Content-Type');
       const isJson = contentType === 'application/json';
 
@@ -67,18 +83,18 @@ export class NgxFetchApiService {
   }
 
   get<T>(path: string, params?: HttpParams): Promise<T> {
-    return this.request<T>('GET', path, params);
+    return this.request<T>('GET', path, { params });
   }
 
   post<T>(path: string, data: any, params?: HttpParams): Promise<T> {
-    return this.request<T>('POST', path, params, data);
+    return this.request<T>('POST', path, { params, data });
   }
 
   put<T>(path: string, data: any, params?: HttpParams): Promise<T> {
-    return this.request<T>('PUT', path, params, data);
+    return this.request<T>('PUT', path, { params, data });
   }
 
   delete(path: string, params?: HttpParams): Promise<void> {
-    return this.request<void>('DELETE', path, params);
+    return this.request<void>('DELETE', path, { params });
   }
 }
