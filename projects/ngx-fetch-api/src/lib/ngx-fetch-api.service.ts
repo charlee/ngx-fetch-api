@@ -106,11 +106,13 @@ export class NgxFetchApiService implements NgxFetchApiConfig {
     options?: RequestOptions<T>,
   ): Promise<T> {
     const fetchOptions = { method };
+    const headers = this.getHeaders(options.headers || {});
     if (options.data) {
       fetchOptions['body'] = JSON.stringify(options.data);
+      headers['Content-Type'] = 'application/json';
     }
 
-    fetchOptions['headers'] = this.getHeaders(options.headers || {});
+    fetchOptions['headers'] = headers;
 
     return fetch(this.getUrl(path, options.params), fetchOptions).then(response => {
       const contentType = response.headers.get('Content-Type');
