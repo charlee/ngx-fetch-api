@@ -19,6 +19,6 @@ export class AppComponent implements OnInit {
       },
       trailingSlash: 'always',
     });
-    this.fetchApi.get('hello', { t: 2 });
+    this.fetchApi.get('hello', { params: { t: 2 }});
   }
 }

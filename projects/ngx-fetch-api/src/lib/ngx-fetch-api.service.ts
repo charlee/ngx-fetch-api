@@ -7,10 +7,13 @@ export type HttpHeaders = { [key: string]: string };
 
 export type HttpMethods = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
 
-export interface RequestOptions<T extends object> {
+export interface RequestOptions {
   params?: HttpParams;
   headers?: HttpHeaders;
-  data?: object;
+}
+
+export interface RequestOptionsWithData<T extends object> extends RequestOptions {
+  data?: T;
 }
 
 export interface NgxFetchApiConfig {
@@ -110,15 +113,17 @@ export class NgxFetchApiService {
     return url;
   }
 
-  request<T extends object>(
+  request<T extends object | void>(
     method: HttpMethods,
     path: string,
-    options?: RequestOptions<T>,
+    options?: RequestOptionsWithData<Partial<T>> | RequestOptions,
   ): Promise<T> {
     const fetchOptions = { method };
     const headers = this.getHeaders(options.headers || {});
-    if (options.data) {
-      fetchOptions['body'] = JSON.stringify(options.data);
+    if ((<RequestOptionsWithData<Partial<T>>>options).data) {
+      fetchOptions['body'] = JSON.stringify(
+        (<RequestOptionsWithData<Partial<T>>>options).data,
+      );
       headers['Content-Type'] = 'application/json';
     }
 
@@ -149,27 +154,26 @@ export class NgxFetchApiService {
     });
   }
 
-  get<T extends object>(path: string, params?: HttpParams): Promise<T> {
-    return this.request<T>('GET', path, { params });
+  get<T extends object>(path: string, options?: RequestOptions): Promise<T> {
+    return this.request<T>('GET', path, options);
   }
 
-  post<T extends object>(path: string, data: T, params?: HttpParams): Promise<T> {
-    return this.request<T>('POST', path, { params, data });
+  post<T extends object>(path: string, options?: RequestOptionsWithData<T>): Promise<T> {
+    return this.request<T>('POST', path, options);
   }
 
-  put<T extends object>(path: string, data: Partial<T>, params?: HttpParams): Promise<T> {
-    return this.request<T>('PUT', path, { params, data });
+  put<T extends object>(path: string, options?: RequestOptionsWithData<T>): Promise<T> {
+    return this.request<T>('PUT', path, options);
   }
 
   patch<T extends object>(
     path: string,
-    data: Partial<T>,
-    params?: HttpParams,
+    options?: RequestOptionsWithData<Partial<T>>,
   ): Promise<T> {
-    return this.request<T>('PATCH', path, { params, data });
+    return this.request<T>('PATCH', path, options);
   }
 
-  delete<T extends object>(path: string, params?: HttpParams): Promise<T> {
-    return this.request<T>('DELETE', path, { params });
+  delete(path: string, options?: RequestOptions): Promise<void> {
+    return this.request<void>('DELETE', path, options);
   }
 }
